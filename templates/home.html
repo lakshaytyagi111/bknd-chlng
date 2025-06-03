@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Prime</title>
+
+</head>
+<body>
+<h1>Prime Checker</h1>
+<section>
+  <header>
+    {% block header %}{% endblock header %}
+  </header>
+  <main>
+    <div class="container mt-3">
+        <input type="text" id="numberInput" placeholder="Enter a number">
+        <button onclick="checkNumber()">Check</button>
+        <p id="result"></p>    
+  </main>
+</section>
+</body>
+
+<script>
+    async function checkNumber() {
+        const number = document.getElementById('numberInput').value;
+        const resultEle = document.getElementById('result');
+
+        if (!number){
+            resultEle.textContent = 'Please Enter A Number First.';
+            return;
+        }
+        try {
+        const response = await fetch(`/check-prime?number=${encodeURIComponent(number)}`);
+        const data = await response.json();
+
+            if (!response.ok) {
+            resultEle.textContent = `Error: ${data.error}`;
+            } 
+            else {
+            resultEle.textContent = `The number ${data.number} is ${data.result}.`;
+            }
+        } 
+        catch (error) {
+        resultEle.textContent = 'Error Occured.';
+      }
+    }
+</script>
+</html>
